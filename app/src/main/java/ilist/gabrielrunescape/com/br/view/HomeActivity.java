@@ -11,6 +11,8 @@ import ilist.gabrielrunescape.com.br.R;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.app.AppCompatActivity;
+
+import ilist.gabrielrunescape.com.br.dao.ItemDAO;
 import ilist.gabrielrunescape.com.br.object.Item;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,6 +31,7 @@ import ilist.gabrielrunescape.com.br.adapter.RecycleTouchListener;
  * @since 2016-12-12
  */
 public class HomeActivity extends AppCompatActivity {
+    private ItemDAO dao;
     private List<Item> itens;
     private RecyclerView recyclerView;
     private static String TAG = HomeActivity.class.getSimpleName();
@@ -42,8 +45,10 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        itens = new ArrayList<>();
+        dao = new ItemDAO(this);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_itens);
+
+        dao.open(true);
     }
 
     /**
@@ -51,13 +56,11 @@ public class HomeActivity extends AppCompatActivity {
      */
     @Override
     protected void onResume() {
+        dao.open(true);
         super.onResume();
 
         try {
-            for (int i = 0; i < 15; i++) {
-                itens.add(new Item("Produto com código super fodão kkkkkk x " + i, i + "lésimo"));
-                Log.i(TAG, "Criando informações para recyclerView e inserindo-as ...");
-            }
+            itens = dao.getAll();
 
             ItemAdapter adapter = new ItemAdapter(itens);
 
