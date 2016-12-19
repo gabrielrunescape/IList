@@ -1,7 +1,16 @@
 <resources>
+    <!-- AndroidManifest.xml -->
     <string name="app_name">iList</string>
+    <string name="activity_item">Novo item</string>
 
     <!-- list_item.xml -->
     <string name="txt_status">Status do item</string>
     <string name="txt_nome">Item a ser comprado</string>
+
+    <!-- activity_item -->
+    <string name="et_nome">Nome do produto</string>
+
+    <!-- menu_toolbar.xml -->
+    <string name="menu_check">Gravar</string>
+    <string name="menu_delete">Apagar</string>
 </resources>

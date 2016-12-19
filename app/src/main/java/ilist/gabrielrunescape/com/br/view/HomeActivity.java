@@ -4,19 +4,19 @@ import java.util.List;
 import android.util.Log;
 import android.os.Bundle;
 import android.view.View;
-import java.util.ArrayList;
 import android.widget.Toast;
+import android.content.Intent;
 import android.content.DialogInterface;
 import ilist.gabrielrunescape.com.br.R;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.app.AppCompatActivity;
-
 import ilist.gabrielrunescape.com.br.dao.ItemDAO;
 import ilist.gabrielrunescape.com.br.object.Item;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import ilist.gabrielrunescape.com.br.adapter.ItemAdapter;
+import android.support.design.widget.FloatingActionButton;
 import ilist.gabrielrunescape.com.br.interfaces.ClickListener;
 import ilist.gabrielrunescape.com.br.adapter.RecycleTouchListener;
 
@@ -27,18 +27,19 @@ import ilist.gabrielrunescape.com.br.adapter.RecycleTouchListener;
  * e exibir view em sua activity.
  *
  * @author Gabriel Filipe
- * @version 0.1
+ * @version 0.2
  * @since 2016-12-12
  */
 public class HomeActivity extends AppCompatActivity {
     private ItemDAO dao;
     private List<Item> itens;
     private RecyclerView recyclerView;
+    private FloatingActionButton btn_add_item;
     private static String TAG = HomeActivity.class.getSimpleName();
 
     /**
      * Sobreeescreve o método onCreate() que cria todos as view necessárias.
-     * @param savedInstanceState Última Bundle salvada.
+     * @param savedInstanceState Salva os dados da instância.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +48,7 @@ public class HomeActivity extends AppCompatActivity {
 
         dao = new ItemDAO(this);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_itens);
+        btn_add_item = (FloatingActionButton) findViewById(R.id.btn_add_item);
 
         dao.open(true);
     }
@@ -72,6 +74,14 @@ public class HomeActivity extends AppCompatActivity {
             Log.i(TAG, "Carregando RecyclerView e seu layout.");
 
             touchListenerInRecyclerView();
+
+            btn_add_item.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), ItemActivity.class);
+                    startActivity(intent);
+                }
+            });
         } catch (Exception ex) {
             ex.printStackTrace();
         }

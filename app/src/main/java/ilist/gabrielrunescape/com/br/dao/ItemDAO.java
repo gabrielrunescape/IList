@@ -126,8 +126,8 @@ public class ItemDAO {
      * @return uma lista do tipo Transaction.
      */
     public List<Item> getAll() {
-        List<Item> item = new ArrayList<Item>();
-        String query = "SELECT * FROM `Item`";
+        List<Item> item = new ArrayList<>();
+        String query = "SELECT I.ID, I.NOME, S.Descricao, I.Status FROM Item I INNER JOIN Status S ON I.Status = S.ID";
 
         Cursor cursor = database.rawQuery(query, null);
         cursor.moveToFirst();
@@ -136,8 +136,8 @@ public class ItemDAO {
             while (!cursor.isAfterLast()) {
                 Item i = new Item();
 
-                i.setID(cursor.getLong(1));
-                i.setNome(cursor.getString(2));
+                i.setID(cursor.getLong(0));
+                i.setNome(cursor.getString(1));
                 i.setStatus(cursor.getString(2));
 
                 item.add(i);
@@ -145,11 +145,15 @@ public class ItemDAO {
 
                 Log.i(TAG, "Obtendo itens ...");
             }
+
+            cursor.close();
+            return item;
         } catch (Exception ex) {
             ex.printStackTrace();
             Log.e(TAG, ex.getMessage());
-        }
 
-        return item;
+            cursor.close();
+            return null;
+        }
     }
 }
