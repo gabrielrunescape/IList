@@ -6,18 +6,20 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:id="@+id/activity_home">
-    <ListView
-        android:id="@+id/list_itens"
+
+    <android.support.v7.widget.RecyclerView
+        android:scrollbars="vertical"
+        android:id="@+id/recycler_itens"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content" />
 
     <android.support.design.widget.FloatingActionButton
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:layout_margin="16dp"
         android:id="@+id/btn_add_item"
-        app:layout_anchor="@id/list_itens"
         android:layout_gravity="bottom|end"
         android:src="@drawable/ic_add_24dp"
-        app:layout_anchorGravity="bottom|end" />
+        app:layout_anchorGravity="bottom|end"
+        app:layout_anchor="@id/recycler_itens" />
 </android.support.design.widget.CoordinatorLayout>

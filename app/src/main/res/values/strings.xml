@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">iList</string>
+
+    <!-- list_item.xml -->
+    <string name="txt_status">Status do item</string>
+    <string name="txt_nome">Item a ser comprado</string>
 </resources>
