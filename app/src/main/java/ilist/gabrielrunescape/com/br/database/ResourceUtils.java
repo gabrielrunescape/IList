@@ -1,7 +1,9 @@
 package ilist.gabrielrunescape.com.br.database;
 
-import java.util.Arrays;
+import java.util.List;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.lang.reflect.Field;
 import android.content.res.Resources;
 
 /**
@@ -40,15 +42,22 @@ public class ResourceUtils {
      * Exibe uma lista de arquivos em um determinado diretório.
      *
      * @param path Diretório onde será realizado a operação.
-     * @param res Resource da aplicação.
      *
      * @return Todos os arquivos do diretório.
      * @throws IOException Exceção caso não haja algum erro.
      */
-    public static String[] list(String path, Resources res) throws IOException {
-        String[] files = res.getAssets().list(path);
-        Arrays.sort(files);
+    public static String[] list(Class<?> path) throws IOException {
+        List<String> list = new ArrayList<>();
 
-        return files;
+        for (Field f : path.getFields()) {
+            if (f.getGenericType() == int.class) {
+                list.add(f.getName());
+            }
+        }
+
+        String[] _return = new String[list.size()];
+        _return = list.toArray(_return);
+
+        return _return;
     }
 }

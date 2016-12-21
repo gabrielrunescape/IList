@@ -13,6 +13,8 @@ public class Item {
     private long ID;
     private String nome;
     private String Status;
+    private int quantidade;
+    private String unidade;
 
     /**
      * Construtor simples do objeto.
@@ -72,6 +74,20 @@ public class Item {
     }
 
     /**
+     * @return Quantidade de itens.
+     */
+    public int getQuantidade() {
+        return quantidade;
+    }
+
+    /**
+     * @param quantidade Quantidade de itens.
+     */
+    public void setQuantidade(int quantidade) {
+        this.quantidade = quantidade;
+    }
+
+    /**
      * @return Status como INTEGER (primary key) ou VARCHAR (view).
      */
     public String getStatus() {
@@ -83,5 +99,19 @@ public class Item {
      */
     public void setStatus(String status) {
         Status = status;
+    }
+
+    /**
+     * @return Unidade como INTEGER (primary key) ou VARCHAR(view).
+     */
+    public String getUnidade() {
+        return unidade;
+    }
+
+    /**
+     * @param unidade Unidade como Integer ou VARCHAR.
+     */
+    public void setUnidade(String unidade) {
+        this.unidade = unidade;
     }
 }

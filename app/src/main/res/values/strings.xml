@@ -9,6 +9,8 @@
 
     <!-- activity_item -->
     <string name="et_nome">Nome do produto</string>
+    <string name="et_quantidade">Quantidade</string>
+    <string name="spinner_unidade">Escolha uma unidade</string>
 
     <!-- menu_toolbar.xml -->
     <string name="menu_check">Gravar</string>

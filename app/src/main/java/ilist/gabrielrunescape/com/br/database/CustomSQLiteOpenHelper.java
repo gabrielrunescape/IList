@@ -21,10 +21,8 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class CustomSQLiteOpenHelper extends SQLiteOpenHelper {
     private Context context;
-    private static String SQL_DIR = "raw";
-    private static String UPGRADEFILE_SUFFIX = ".sql";
     private static String CREATEFILE = "create_script";
-    private static String UPGRADEFILE_PREFIX = "upgrade_v-";
+    private static String UPGRADEFILE_PREFIX = "upgrade_v_";
     private static String TAG = CustomSQLiteOpenHelper.class.getSimpleName(); // Logging
 
     /**
@@ -50,9 +48,23 @@ public class CustomSQLiteOpenHelper extends SQLiteOpenHelper {
         try {
             Log.i(TAG, "Criando banco de dados!");
             execSqlFile(CREATEFILE, db);
+
+            Log.i(TAG, "Banco de dados criado com sucesso. Verificando scripts ...");
+
+            for (String sqlFile : ResourceUtils.list(R.raw.class)) {
+                if (sqlFile.startsWith(UPGRADEFILE_PREFIX)) {
+                    int fileVersion = Integer.parseInt(sqlFile.substring(UPGRADEFILE_PREFIX.length()));
+
+                    if (fileVersion > db.getVersion()) {
+                        execSqlFile(sqlFile, db);
+                    }
+                }
+            }
         } catch (RuntimeException ex) {
+            Log.e(TAG, ex.getMessage());
             ex.printStackTrace();
         } catch (IOException ex) {
+            Log.e(TAG, ex.getMessage());
             ex.printStackTrace();
         }
     }
@@ -70,16 +82,16 @@ public class CustomSQLiteOpenHelper extends SQLiteOpenHelper {
             String log = "Atualizando banco de dados da versão %d para versão %d";
             Log.i(TAG, String.format(log, oldVersion, newVersion));
 
-            for (String sqlFile : ResourceUtils.list(SQL_DIR, this.context.getResources())) {
+            for (String sqlFile : ResourceUtils.list(R.raw.class)) {
                 if (sqlFile.startsWith(UPGRADEFILE_PREFIX)) {
-                    int fileVersion = Integer.parseInt(sqlFile.substring(UPGRADEFILE_PREFIX.length(), sqlFile.length() - UPGRADEFILE_SUFFIX.length()));
+                    int fileVersion = Integer.parseInt(sqlFile.substring(UPGRADEFILE_PREFIX.length()));
 
                     if (fileVersion > oldVersion && fileVersion <= newVersion) {
                         execSqlFile(sqlFile, db);
                     }
                 }
             }
-        } catch(IOException ex) {
+        } catch (IOException ex) {
             throw new RuntimeException("Houve uma falha ao atualizar o banco de dados", ex);
         }
     }
@@ -93,11 +105,11 @@ public class CustomSQLiteOpenHelper extends SQLiteOpenHelper {
      * @throws IOException Exceção caso haja algum erro.
      */
     protected void execSqlFile(String sqlFile, SQLiteDatabase db) throws android.database.SQLException, IOException {
-        Log.d(TAG, sqlFile);
-        int file = SQLParser.fileToResource(CREATEFILE, R.raw.class);
+        Log.i(TAG, "Executando arquivo: " + sqlFile);
+        int file = SQLParser.fileToResource(sqlFile, R.raw.class);
 
         for(String instruction : SQLParser.parseSqlFile(file, this.context.getResources())) {
-            Log.d(TAG, instruction);
+            Log.i(TAG, instruction);
             db.execSQL(instruction);
         }
     }
